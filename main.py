@@ -1,4 +1,13 @@
+
 from ion import Job
+
+
+# # # See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# """Minimal jobshop example."""
+
+import collections
+from service import JobSchedulerService
+
 from service import JobSchedulerServiceImpl
 
 
