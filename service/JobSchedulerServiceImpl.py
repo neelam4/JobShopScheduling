@@ -21,12 +21,12 @@ class JobSchedulerServiceImpl():
     def displayScheduledJobs(self, threads):
         for entry in threads:
 
-            print("Thread : {} - ".format(entry), end="")
+            print("Machine : {} - ".format(entry), end="")
             for name in threads[entry]:
                 print(name, end=" ")
             print()
 
-    def shortestJobFirst(self, threadNo, job):
+    def shortestJobFirst(self, threadNo:int, job):
         def comparator(j1, j2):
             if j1.getDuration() == j2.getDuration():
                 return j1.getPriority()-j2.getPriority()
@@ -37,12 +37,14 @@ class JobSchedulerServiceImpl():
         threads = self.assignThreadsToJobs(threadNo, jobs)
         self.displayScheduledJobs(threads)
 
-    def firstComeFirstServe(self, threadNo, job):
-        print("FCFS")
-        threads = self.assignThreadsToJobs(threadNo, job)
+    def firstComeFirstServe(self, threadNo:int, job):
+        print("FCFS : ")
+        jobs = job
+        # jobs.sort()
+        threads = self.assignThreadsToJobs(threadNo, jobs)
         self.displayScheduledJobs(threads)
 
-    def fixedPriorityScheduling(self, threadNo, job):
+    def fixedPriorityScheduling(self, threadNo:int, job):
         def comparator(j1, j2):
             if j1.getPriority() == j2.getPriority():
                 if j1.getUserType() == j2.getUserType():
@@ -56,7 +58,7 @@ class JobSchedulerServiceImpl():
         threads = self.assignThreadsToJobs(threadNo, jobs)
         self.displayScheduledJobs(threads)
 
-    def assignThreadsToJobsForEdf(self, threadNo, jobs):
+    def assignThreadsToJobsForEdf(self, threadNo:int, jobs):
         threads = dict()
         edf = None
         deadline = 0
@@ -81,12 +83,12 @@ class JobSchedulerServiceImpl():
     def displayScheduledJobsForEdf(self, threads):
         # print(threads)
         for entry in threads:
-            print("Threads : {} - ".format(entry), end="")
+            print("Machine : {} - ".format(entry), end="")
             for name in threads[entry].getJobNames():
                 print(name, end=" ")
             print()
 
-    def earliestDeadlineFirst(self, threadNo, job):
+    def earliestDeadlineFirst(self, threadNo:int, job):
         print("EDF : ")
         jobs = job
 
