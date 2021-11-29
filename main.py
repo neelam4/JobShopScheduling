@@ -16,8 +16,8 @@ def main():
     jobs.append(job3)
     jobs.append(job4)
     jobs.append(job5)
-    jobScheduler.shortestJobFirst(2, jobs)
     jobScheduler.firstComeFirstServe(2, jobs)
+    jobScheduler.shortestJobFirst(2, jobs)
     jobScheduler.fixedPriorityScheduling(2, jobs)
     jobScheduler.earliestDeadlineFirst(2, jobs)
 
