@@ -1,5 +1,5 @@
 class EDF:
-    def __init__(self, jobNames, deadline):
+    def __init__(self, jobNames=None, deadline=None):
         self.jobNames = jobNames
         self.deadline = deadline
 
