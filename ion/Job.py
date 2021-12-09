@@ -1,5 +1,5 @@
 class Job:
-    def __init__(self, jobName, duration, priority, deadline, userType):
+    def __init__(self, jobName=None, duration=None, priority=None, deadline=None, userType=None):
         self.jobName = jobName
         self.duration = duration
         self.priority = priority
@@ -20,8 +20,8 @@ class Job:
 
     def getPriority(self):
         return self.priority
-
-    def setJobName(self, priority):
+        
+    def setPriority(self, priority):
         self.priority = priority
 
     def getDeadline(self):

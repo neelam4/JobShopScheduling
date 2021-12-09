@@ -2,7 +2,7 @@ from ion import Job, EDF
 from functools import cmp_to_key
 
 import matplotlib.pyplot as plt
-
+import random
 class JobSchedulerServiceImpl():
     
     def assignThreadsToJobs(self, threadNo, job,f_name:str):
@@ -50,7 +50,10 @@ class JobSchedulerServiceImpl():
             machine_thread[th].pop(0)
 
         for th in range(threadNo):
-            gnt.broken_barh(machine_thread[th],(10*th+6,8),facecolors=('indigo', 'blue','red'))
+            no_of_jobs = len(machine_thread[th])
+            get_colors = lambda n:list(map(lambda i: "#"+"%06x" %random.randint(0, 0xFFFFFF),range(n)))
+            
+            gnt.broken_barh(machine_thread[th],(10*th+6,8),facecolors=get_colors(no_of_jobs))
 
         plt.title(f_name)
         plt.show()
@@ -146,7 +149,9 @@ class JobSchedulerServiceImpl():
             machine_thread[th].pop(0)
 
         for th in range(threadNo):
-            gnt.broken_barh(machine_thread[th],(10*th+6,8),facecolors=('indigo', 'blue','red'))
+            no_of_jobs = len(machine_thread[th])
+            get_colors = lambda n:list(map(lambda i: "#"+"%06x" %random.randint(0, 0xFFFFFF),range(n)))
+            gnt.broken_barh(machine_thread[th],(10*th+6,8),facecolors=get_colors(no_of_jobs))
 
         plt.title(f_name)
         plt.show()
