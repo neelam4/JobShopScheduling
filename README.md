@@ -39,7 +39,7 @@ are expected to print the order of jobs scheduled for each algorithm on each thr
 ##### Example
 
 ###### Input
-`Threads= 2`
+`Machines= 2`
 
 Job Name | Duration | Priority | Deadline | User Type
 ---------|---------|---------|---------|---------
