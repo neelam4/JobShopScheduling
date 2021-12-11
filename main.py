@@ -14,6 +14,8 @@ def main():
     # job6 = Job.Job("J6", 30, 2, 30, 2)
     jobs = list()
     job = Job.Job()
+    no_machines = 1
+    no_machines = int(input("Enter number of machine(s) :"))
     input_file_name = input("Select a '.txt' file : ")
     print()
     input_file = open(input_file_name,"r")
@@ -33,13 +35,13 @@ def main():
     # jobs.append(job4)
     # jobs.append(job5)
     # jobs.append(job6)
-    jobScheduler.firstComeFirstServe(3, jobs)
+    jobScheduler.firstComeFirstServe(no_machines, jobs)
     print()
-    jobScheduler.shortestJobFirst(4, jobs)
+    jobScheduler.shortestJobFirst(no_machines, jobs)
     print()
-    jobScheduler.fixedPriorityScheduling(5, jobs)
+    jobScheduler.fixedPriorityScheduling(no_machines, jobs)
     print()
-    jobScheduler.earliestDeadlineFirst(2, jobs)
+    jobScheduler.earliestDeadlineFirst(no_machines, jobs)
 
 
 if __name__ == '__main__':

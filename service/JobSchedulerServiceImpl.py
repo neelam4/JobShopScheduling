@@ -4,17 +4,17 @@ from functools import cmp_to_key
 import matplotlib.pyplot as plt
 import random
 class JobSchedulerServiceImpl():
-    
-    def assignThreadsToJobs(self, threadNo, job,f_name:str):
+
+    def plot_gantt(self,threadNo:int,machine_thread:dict,f_name:str):
         # Declaring a figure "gnt"
         fig, gnt = plt.subplots()
 
         # Setting Y-axis limits
-        gnt.set_ylim(0, 50)
+        gnt.set_ylim(0, 60)
 
         # Setting X-axis limits
-        gnt.set_xlim(0, 100)
-        gnt.set_xlabel('seconds since start')
+        gnt.set_xlim(0, 150)
+        gnt.set_xlabel('Time(unit)')
         gnt.set_ylabel('Machine(s)')
         gnt.set_yticks([10,20,30,40,50])
         # Labelling tickes of y-axis
@@ -22,33 +22,6 @@ class JobSchedulerServiceImpl():
         # If you want grid on the plot use
         # gnt.grid(True)
         gnt.grid(False)
-
-        threads = dict()
-        jobNames = list()
-        machine_thread = dict()
-        for th in range(threadNo):
-            machine_thread[th]=list()
-            machine_thread[th].append(tuple((0,0)))
-        
-        thread = 0
-        for j in job:
-            if ((thread % threadNo) not in threads):
-                jobNames = list()
-                jobNames.append(j.getJobName())
-                last_mac = machine_thread[thread%threadNo]
-                l = tuple((last_mac[-1][-1]+last_mac[-1][0],j.getDuration()))
-                machine_thread[thread%threadNo].append(l)
-                threads[thread % threadNo] = jobNames
-            else:
-                jobNames = threads[thread % threadNo]
-                jobNames.append(j.getJobName())
-                last_mac = machine_thread[thread%threadNo]
-                l = tuple((last_mac[-1][-1]+last_mac[-1][0],j.getDuration()))
-                machine_thread[thread%threadNo].append(l)
-            thread += 1
-        for th in range(threadNo):
-            machine_thread[th].pop(0)
-
         for th in range(threadNo):
             no_of_jobs = len(machine_thread[th])
             get_colors = lambda n:list(map(lambda i: "#"+"%06x" %random.randint(0, 0xFFFFFF),range(n)))
@@ -56,36 +29,79 @@ class JobSchedulerServiceImpl():
             gnt.broken_barh(machine_thread[th],(10*th+6,8),facecolors=get_colors(no_of_jobs))
 
         plt.title(f_name)
+        # plt.legend()
         plt.show()
 
-        return threads
+    
+    def assignThreadsToJobs(self, threadNo:int, job:list):
 
-    def displayScheduledJobs(self, threads):
+        threads = dict()
+        jobNames = list()
+        machine_thread = dict()
+        job_name_legend = dict()
+        thread = 0
+
+        for th in range(threadNo):
+            machine_thread[th]=list()
+            machine_thread[th].append(tuple((0,0)))
+            job_name_legend[th]=list()
+        
+        for j in job:
+            if ((thread % threadNo) not in threads):
+                jobNames = list()
+                jobNames.append(j.getJobName())
+                last_mac = machine_thread[thread%threadNo]
+                l = tuple((last_mac[-1][-1]+last_mac[-1][0],j.getDuration()))
+                machine_thread[thread%threadNo].append(l)
+                job_name_legend[thread%threadNo].append(j.getJobName())
+                threads[thread % threadNo] = jobNames
+            else:
+                jobNames = threads[thread % threadNo]
+                jobNames.append(j.getJobName())
+                last_mac = machine_thread[thread%threadNo]
+                l = tuple((last_mac[-1][-1]+last_mac[-1][0],j.getDuration()))
+                machine_thread[thread%threadNo].append(l)
+                job_name_legend[thread%threadNo].append(j.getJobName())
+            thread += 1
+
+        for th in range(threadNo):
+            machine_thread[th].pop(0)
+        
+        return threads,machine_thread
+
+    def displayScheduledJobs(self, threads:dict,machine_thread:dict,f_name:str,threadNo:int):
         for entry in threads:
-
             print("Machine : {} - ".format(entry+1), end="")
             for name in threads[entry]:
                 print(name, end=" ")
             print()
-     
-    def shortestJobFirst(self, threadNo:int, job):
+
+        self.plot_gantt(threadNo,machine_thread,f_name)
+
+    def shortestJobFirst(self, threadNo:int, job:list):
+        print("Shortest Job First : ")
+        jobs = job
+        f_name = "Shortest Job First"
+
         def comparator(j1, j2):
             if j1.getDuration() == j2.getDuration():
                 return j1.getPriority()-j2.getPriority()
             return j1.getDuration()-j2.getDuration()
-        print("Shortest Job First : ")
-        jobs = job
         jobs.sort(key=cmp_to_key(comparator))
-        threads = self.assignThreadsToJobs(threadNo, jobs,"Shortest Job First")
-        self.displayScheduledJobs(threads)
+        threads,machine_thread = self.assignThreadsToJobs(threadNo, jobs)
+        self.displayScheduledJobs(threads,machine_thread,f_name,threadNo)
 
     def firstComeFirstServe(self, threadNo:int, job):
-        print("FCFS : ")
+        print("First Come First Serve : ")
         jobs = job
-        threads = self.assignThreadsToJobs(threadNo, jobs,"First Come First Serve")
-        self.displayScheduledJobs(threads)
+        f_name = "First Come First Serve "
+        threads,machine_thread = self.assignThreadsToJobs(threadNo, jobs)
+        self.displayScheduledJobs(threads,machine_thread,f_name,threadNo)
 
-    def fixedPriorityScheduling(self, threadNo:int, job):
+    def fixedPriorityScheduling(self, threadNo:int, job:list):
+        print("Fixed Priority Scheduling : ")
+        jobs = job
+        f_name = "Fixed Priority Scheduling"
         def comparator(j1, j2):
             if j1.getPriority() == j2.getPriority():
                 if j1.getUserType() == j2.getUserType():
@@ -93,37 +109,20 @@ class JobSchedulerServiceImpl():
                 else:
                     return j1.getUserType()-j2.getUserType()
             return int(j1.getPriority()-j2.getPriority())
-        print("FPS : ")
-        jobs = job
         jobs.sort(key=cmp_to_key(comparator))
-        threads = self.assignThreadsToJobs(threadNo, jobs,"Fixed Priority Scheduling")
-        self.displayScheduledJobs(threads)
+        threads,machine_thread = self.assignThreadsToJobs(threadNo, jobs)
+        self.displayScheduledJobs(threads,machine_thread,f_name,threadNo)
 
-    def assignThreadsToJobsForEdf(self, threadNo:int, jobs,f_name:str):
+    def assignThreadsToJobsForEdf(self, threadNo:int, jobs:list):
         threads = dict()
         edf = EDF.EDF()
-
-        # Declaring a figure "gnt"
-        fig, gnt = plt.subplots()
-
-        # Setting Y-axis limits
-        gnt.set_ylim(0, 50)
-
-        # Setting X-axis limits
-        gnt.set_xlim(0, 100)
-        gnt.set_xlabel('seconds since start')
-        gnt.set_ylabel('Machine(s)')
-        gnt.set_yticks([10,20,30,40,50])
-        # Labelling tickes of y-axis
-        gnt.set_yticklabels(['1', '2', '3','4','5'])
-        gnt.grid(False)
-
         machine_thread = dict()
+        thread = 0
+
         for th in range(threadNo):
             machine_thread[th]=list()
             machine_thread[th].append(tuple((0,0)))
 
-        thread = 0
         for j in jobs:
             if ((thread % threadNo) not in threads):
                 if j.getDuration() <= j.getDeadline():
@@ -145,28 +144,24 @@ class JobSchedulerServiceImpl():
                     l = tuple((last_mac[-1][-1]+last_mac[-1][0],j.getDuration()))
                     machine_thread[thread%threadNo].append(l)
                     thread += 1
+
         for th in range(threadNo):
             machine_thread[th].pop(0)
 
-        for th in range(threadNo):
-            no_of_jobs = len(machine_thread[th])
-            get_colors = lambda n:list(map(lambda i: "#"+"%06x" %random.randint(0, 0xFFFFFF),range(n)))
-            gnt.broken_barh(machine_thread[th],(10*th+6,8),facecolors=get_colors(no_of_jobs))
+        return threads,machine_thread
 
-        plt.title(f_name)
-        plt.show()
-        return threads
-
-    def displayScheduledJobsForEdf(self, threads):
+    def displayScheduledJobsForEdf(self, threads,machine_thread:dict,f_name:str,threadNo:int):
         for entry in threads:
             print("Machine : {} - ".format(entry+1), end="")
             for name in threads[entry].getJobNames():
                 print(name, end=" ")
             print()
-        
-    def earliestDeadlineFirst(self, threadNo:int, job):
-        print("EDF : ")
+        self.plot_gantt(threadNo,machine_thread,f_name)
+
+    def earliestDeadlineFirst(self, threadNo:int, job:list):
+        print("Earliest Deadline First : ")
         jobs = job
+        f_name = "Earliest Deadline First"
 
         def comparator(j1, j2):
             if j1.getDeadline() == j2.getDeadline():
@@ -178,5 +173,5 @@ class JobSchedulerServiceImpl():
                 return int(j1.getDeadline()-j2.getDeadline())
         
         jobs.sort(key=cmp_to_key(comparator))
-        threads = self.assignThreadsToJobsForEdf(threadNo, jobs,"Earliest Deadline First")
-        self.displayScheduledJobsForEdf(threads)
+        threads,machine_thread = self.assignThreadsToJobsForEdf(threadNo, jobs)
+        self.displayScheduledJobsForEdf(threads,machine_thread,f_name,threadNo)
