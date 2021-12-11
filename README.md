@@ -53,21 +53,21 @@ J5 | 10 | P2 | 30 | User
 
 JOB SCHEDULER
 
-Enter number of machine(s) :2
-Select a '.txt' file : job.txt
+Enter number of machine(s) :2\
+Select a '.txt' file : job.txt\
 
-First Come First Serve : 
-Machine : 1 - J1 J3 J5 
-Machine : 2 - J2 J4 
+First Come First Serve :\
+Machine : 1 - J1 J3 J5\
+Machine : 2 - J2 J4\
 
-Shortest Job First : 
-Machine : 1 - J1 J3 J4 
-Machine : 2 - J5 J2 
+Shortest Job First :\
+Machine : 1 - J1 J3 J4\ 
+Machine : 2 - J5 J2\
 
-Fixed Priority Scheduling : 
-Machine : 1 - J2 J4 J5 
-Machine : 2 - J1 J3 
+Fixed Priority Scheduling :\ 
+Machine : 1 - J2 J4 J5\
+Machine : 2 - J1 J3\
 
-Earliest Deadline First : 
-Machine : 1 - J1 J2 
-Machine : 2 - J5 J4 
+Earliest Deadline First :\ 
+Machine : 1 - J1 J2\ 
+Machine : 2 - J5 J4\
