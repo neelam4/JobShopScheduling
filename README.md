@@ -74,7 +74,7 @@ Machine : 2 - J5 J4<br />
 
 `Gantt Chart`
 
-![FCFS](https://github.com/neelam4/JobShopScheduling/blob/main/Figure_1.png)
+![FCFS](https://github.com/neelam4/JobShopScheduling/blob/main/Output%20Images/Figure_1.png)
 ![SJF](https://github.com/neelam4/JobShopScheduling/blob/main/Figure_2.png)
 ![FPS](https://github.com/neelam4/JobShopScheduling/blob/main/Figure_3.png)
 ![EDF](https://github.com/neelam4/JobShopScheduling/blob/main/Figure_4.png)
